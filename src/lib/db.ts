@@ -9,6 +9,6 @@ const adapter = new PrismaNeon({
   connectionString,
 });
 
-export const db = new PrismaClient({
+export const prisma = new PrismaClient({
   adapter,
 });

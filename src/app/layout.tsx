@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Lora, Roboto_Mono } from "next/font/google";
 import "./globals.css";
+import { TRPCReactProvider} from "@/trpc/client"
 
 const fontSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -30,10 +31,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <TRPCReactProvider>
+          <html lang="en">
       <body className={`${fontSans.variable} ${fontSerif.variable} ${fontMono.variable} antialiased`}>
         {children}
       </body>
     </html>
+    </TRPCReactProvider>
   );
 }
