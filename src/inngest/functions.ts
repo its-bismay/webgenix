@@ -1,14 +1,20 @@
 import { inngest } from "./client";
+import { createAgent, gemini } from "@inngest/agent-kit";
 
 export const processTask = inngest.createFunction(
-  { id: "process-task", triggers: { event: "app/task.created" } },
-  async ({ event, step }) => {
-    const result = await step.run("handle-task", async () => {
-      return { processed: true, id: event.data.id };
-    });
+	{ id: "process-task" },
+	{ event: "app/task.created" },
+	async ({ event }) => {
+		const agent = createAgent({
+			name: "ai-agent",
+			system: "You are an assistant for answering questions to user queries.",
+			model: gemini({ model: "gemini-3.1-flash-lite-preview" }),
+		});
 
-    await step.sleep("pause", "10s");
+		const { output } = await agent.run(
+			`Answer the following user query: ${event.data.input}`,
+		);
 
-    return { message: `Task ${event.data.id} complete`, result };
-  }
+		return { output };
+	},
 );
